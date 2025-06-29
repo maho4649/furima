@@ -36,3 +36,9 @@ Route::get('/mypage/sell', [UserController::class, 'sellList'])->name('mypage.se
 Route::get('/mypage/profile', [UserController::class, 'editProfile'])->name('profile.edit')->middleware('auth');
 Route::post('/mypage/profile', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 
+//お気に入り・コメント
+Route::post('/items/{item}/like', [ItemController::class, 'like'])->name('items.like')->middleware('auth');
+Route::post('/items/{item}/like', [ItemController::class, 'toggle'])->name('items.like')->middleware('auth');
+
+Route::post('/items/{item}/comment', [ItemController::class, 'comment'])->name('items.comment')->middleware('auth');
+

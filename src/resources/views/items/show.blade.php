@@ -17,8 +17,17 @@
 
             {{-- いいね・コメント --}}
             <div class="flex items-center gap-4 mb-4">
-                <button class="flex items-center gap-1">⭐ 12</button>
-                <button class="flex items-center gap-1">💬 5</button>
+                {{-- ⭐ 評価（Like） --}}
+                <form action="{{ route('items.like', $item->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="flex items-center gap-1">
+                    ⭐ {{ $item->likes->count() }}
+                    </button>
+                 {{-- 💬 コメント表示 --}}
+                    <button type="button" onclick="toggleComments()" class="flex items-center gap-1">
+                    💬 {{ $item->comments->count() }}
+                    </button>
+                </form>
             </div>
 
             <form action="{{ route('purchase.show', $item->id) }}" method="GET">
@@ -41,11 +50,22 @@
                 @endif
 
                 {{-- コメント投稿 --}}
-                <form action="#" method="POST" class="mt-4">
+                <form action="{{ route('items.comment', $item->id) }}" method="POST">
                     @csrf
                     <textarea name="comment" rows="3" class="w-full border rounded p-2" placeholder="コメントを入力..."></textarea>
                     <button type="submit" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">コメントを送信する</button>
                 </form>
+                {{-- コメント履歴（トグル） --}}
+                <div id="comments-section" class="mt-4 hidden">
+                    <h3 class="font-semibold mb-2">コメント一覧</h3>
+                    @forelse ($item->comments as $comment)
+                        <div class="p-2 border-b text-sm">
+                            <strong>{{ $comment->user->name }}</strong>: {{ $comment->content }}
+                        </div>
+                    @empty
+                        <p class="text-gray-500">コメントはまだありません。</p>
+                    @endforelse
+                </div>
             </div>
         </div>
     </div>
