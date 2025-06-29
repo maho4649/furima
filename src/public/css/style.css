@@ -1,0 +1,329 @@
+/* 基本設定 */
+.logo-header {
+    background-color: black;
+    padding: 10px 20px;
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background: white;
+}
+
+
+/* ナビゲーションバー全体 */
+.navbar {
+    background-color: black;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+/* 中央コンテナ */
+.nav-container {
+    max-width: 1200px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+}
+
+
+/* ロゴ */
+.logo {
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    margin-right: auto;
+}
+
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+    
+}
+
+/* 検索フォーム */
+.search-form {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-right: auto;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #aaa;
+    border-radius: 4px 0 0 4px;
+}
+
+.search-form button {
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+
+/* 認証済ユーザーのナビリンク */
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.auth-links {
+    margin-left: auto;
+    gap: 30px;
+    align-items: center;
+}
+
+/* ゲスト用リンク（ログイン・登録） */
+.guest-links {
+    margin-left: auto;
+    display: flex;
+    gap: 30px;
+}
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.nav-btn:hover {
+    background-color: #eee;
+}
+
+a.sell-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+a.sell-btn:hover {
+    background-color: #eee;
+}
+
+
+
+/* 共通フォームラッパー */
+.auth-form {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* タイトル */
+.auth-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+.auth-form label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* 入力フィールド */
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* ボタン */
+.auth-form button {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #ff4800;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.auth-form button:hover {
+    background-color: #0056b3;
+}
+
+/* リンク */
+.auth-form a {
+    display: block;
+    margin-top: 15px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.auth-form a:hover {
+    text-decoration: underline;
+}
+
+/* エラー表示 */
+.error-box {
+    background-color: #ffe6e6;
+    border: 1px solid #ff8080;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.image-upload-box {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 6px;
+    background-color: white;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.error-text {
+    color: #d10000;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* フォームや他のページ用の汎用 container */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+
+h2 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+    border-bottom: 2px ;
+    padding-bottom: 0.5rem;
+}
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.custom-file-label {
+    display: block;
+    padding: 0.5rem 1rem;
+    border: 1px solid red;
+    background-color: white;
+    color: red;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.custom-file-label:hover {
+    background-color: red;
+    color: white;
+}
+
+/* inputを非表示にする */
+.custom-file-input {
+    display: none;
+}
+
+.category-btn {
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 1px solid red;
+    border-radius: 9999px;
+    background-color: white;
+    color: red;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s;
+    
+}
+
+/* ホバー時に赤くする */
+.category-btn:hover, 
+.category-btn.selected{
+    background-color: red;
+    border-color: white;
+    color: white;
+}
+h3 {
+    font-size: 1.25rem;
+    /* 任意で調整 */
+    font-weight: bold;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ccc;
+    /* 下線 */
+    color: #686262;
+}
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    resize: vertical;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+.submit-btn {
+    display: block;
+    background-color: #ff4800;
+    color: white;
+    padding: 10px 16px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 2rem auto 0 auto;
+}
