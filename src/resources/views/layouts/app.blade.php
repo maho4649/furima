@@ -13,7 +13,7 @@
             <img src="{{ asset('storage/logo.svg') }}" alt="Logo">
           </a>
             <form action="{{ route('home') }}" method="GET" class="search-form">
-                <input type="text" name="search" placeholder="何をお探しですか？">
+                <input type="text" name="search" placeholder="何をお探しですか？" value="{{ request('search') }}">
                 <button type="submit">検索</button>
             </form>
 

@@ -11,13 +11,18 @@ use App\Models\Like;
 
 class ItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
 {
     $query = Item::query()->latest();
 
     // 認証中なら自分の出品を除外
     if (auth()->check()) {
         $query->where('user_id', '!=', auth()->id());
+    }
+
+    // 商品名で部分一致検索
+    if ($request->filled('search')) {
+        $query->where('name', 'like', '%' . $request->search . '%');
     }
 
     $items = $query->get();
