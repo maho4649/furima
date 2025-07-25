@@ -20,7 +20,11 @@ class Item extends Model
         'condition',
     ];
 
-    
+    public function favorites()
+    {
+    return $this->hasMany(Favorite::class);
+    }
+
     //出品者（ユーザー）とのリレーション
     public function user()
     {
@@ -52,6 +56,7 @@ class Item extends Model
     }
 
     protected $casts = [
+        'is_sold' => 'boolean',
         //'categories' => 'array',
     ];
     

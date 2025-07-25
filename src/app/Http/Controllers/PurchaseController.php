@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\PurchaseRequest;
 use App\Models\Item;
+use App\Models\Purchase;
+
 
 class PurchaseController extends Controller
 {
@@ -13,24 +16,32 @@ class PurchaseController extends Controller
     return view('purchase.show', compact('item'));
 }
 
-public function purchase(Request $request, $item_id)
+public function purchase(PurchaseRequest $request, $item_id)
 {
+    $user = auth()->user();
     $item = Item::findOrFail($item_id);
 
-    // 購入処理ロジック（例：購入テーブルに記録）
-    $request->validate([
-        'payment_method' => 'required',
-        'postal_code' => 'required',
-        'address' => 'required',
-    ]);
+    if ($item->is_sold) {
+        return back()->with('error', 'すでに売り切れています。');
+    }
+    // 住所が未設定ならリダイレクト
+    if (!$user->zipcode || !$user->address) {
+        return redirect()->route('profile.edit')->with('warning', 'プロフィール（住所）を登録してください');
+    }
 
-    auth()->user()->purchases()->create([
+    // 購入履歴を保存
+    Purchase::create([
+        'user_id' => $user->id,
         'item_id' => $item->id,
         'payment_method' => $request->payment_method,
-        'postal_code' => $request->postal_code,
-        'address' => $request->address,
-        'building' => $request->building,
+        'postal_code' => $user->zipcode,
+        'address' => $user->address,
+        'building' => $user->building,
     ]);
+    // is_sold を true にする
+    $item->is_sold = true;
+    $item->save();
+
 
     return redirect()->route('mypage.buy')->with('success', '購入が完了しました');
   }

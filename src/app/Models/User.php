@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'zipcode',
+        'address',
+        'building',
+        'left_icon',
     ];
 
     /**
@@ -54,12 +58,14 @@ class User extends Authenticatable
 
     public function purchasedItems()
     {
-    return $this->belongsToMany(Item::class, 'purchases')->withTimestamps();
+      return $this->belongsToMany(Item::class, 'item_user', 'user_id', 'item_id')
+        ->withTimestamps()
+        ->withPivot('created_at');
     }
 
     public function purchases()
     {
-    return $this->hasMany(Purchase::class);
+     return $this->hasMany(Purchase::class);
     }
 
 

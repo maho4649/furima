@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto p-6">
+<div class="container mx-auto p-6" style="max-width: 600px;">
     <h2 class="text-2xl font-bold mb-4">商品の出品</h2>
 
     <form action="{{ route('item.store') }}" method="POST" enctype="multipart/form-data">
@@ -10,15 +10,18 @@
         <!-- 商品画像 -->
         <div class="mb-4">
             <label class="image">商品画像</label>
-
-          <div class="image-upload-box">
+              <div class="image-upload-box" style="text-align: center;">
             <label for="image" class="custom-file-label">画像を選択する</label>
-            <input id="image" class="custom-file-input" type="file" name="image" accept="image/*" required>
-            <img id="image-preview" src="" alt="画像プレビュー" style="display:none; max-width: 100%; margin-top: 10px; border-radius: 4px;">
+            <input id="image" class="custom-file-input" type="file" name="image" accept="image/*" >
+            @error('image')
+             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+            <img id="image-preview" class="preview-img" src="" alt="画像プレビュー" style="display:none; max-width: 100%; margin-top: 10px; border-radius: 4px;">
           </div>
         </div>
 
         <h3>商品の詳細</h3>
+        <div style=" border-bottom: 2px solid #ccc;margin-bottom: 2.5rem; margin-top: 2rem padding-bottom: 0.5rem;"></div>
 
         <!-- カテゴリ（複数選択） -->
         <div class="mb-4">
@@ -36,26 +39,37 @@
         </div>
         <!-- 選択したカテゴリーを送信するための hidden input -->
         <div id="selected-categories"></div>
+        @error('categories')
+         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+        @enderror
 
 
+       </br>
         <!-- 商品の状態 -->
         <div class="mb-4">
             <label class="block font-semibold">商品の状態</label>
-            <select name="condition" required>
+            <select name="condition" >
                 <option value="">選択してください</option>
                 <option value="良好">良好</option>
                 <option value="目立った傷や汚れなし">目立った傷や汚れなし</option>
                 <option value="やや傷や汚れあり">やや傷や汚れあり</option>
                 <option value="状態が悪い">状態が悪い</option>
             </select>
+            @error('condition')
+             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
-
+        </br>
         <h3>商品名と説明</h3>
+        <div style=" border-bottom: 2px solid #ccc;margin-bottom: 2.5rem; margin-top: 2rem padding-bottom: 0.5rem;"></div>
 
         <!-- 商品名 -->
         <div class="mb-4">
             <label class="block font-semibold">商品名</label>
-            <input type="text" name="name" class="w-full" required>
+            <input type="text" name="name" class="w-full " >
+            @error('name')
+             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- ブランド名 -->
@@ -67,25 +81,30 @@
         <!-- 商品説明 -->
         <div class="mb-4">
             <label class="block font-semibold">説明</label>
-            <textarea name="description" rows="5" class="w-full"></textarea>
+            <textarea name="description"  class="w-full" rows="4"></textarea>
+            @error('description')
+              <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- 販売価格 -->
         <div class="mb-4">
             <label class="block font-semibold">販売価格</label>
-            <div class="flex items-center">
-                <span class="mr-2">¥</span>
-                <input type="number" name="price" class="w-full" required>
+            <div class="price-box w-full">
+             <span class="yen">¥</span>
+             <input type="number" name="price" >
+             @error('price')
+               <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+             @enderror
             </div>
         </div>
 
         <!-- 出品ボタン -->
-        <div>
+        <div style="margin-bottom:80px;">
             <button type="submit" class="submit-btn">出品する</button>
         </div>
     </form>
 </div>
-@endsection
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -160,6 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
-
+@endsection
 
 

@@ -8,6 +8,9 @@ use App\Http\Controllers\UserController;
 
 // 商品一覧（トップ画面）
 Route::get('/', [ItemController::class, 'index'])->name('home');
+// 商品一覧（おすすめ・マイリスト切り替え用）
+Route::get('/items', [ItemController::class, 'index'])->name('item.index');
+
 
 // 商品一覧（マイリスト表示）
 Route::get('/mylist', [ItemController::class, 'myList'])->name('home.mylist')->middleware('auth');
@@ -34,7 +37,7 @@ Route::get('/mypage/sell', [UserController::class, 'sellList'])->name('mypage.se
 
 // プロフィール編集
 Route::get('/mypage/profile', [UserController::class, 'editProfile'])->name('profile.edit')->middleware('auth');
-Route::post('/mypage/profile', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
+Route::put('/mypage/profile', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 
 //お気に入り・コメント
 Route::post('/items/{item}/like', [ItemController::class, 'like'])->name('items.like')->middleware('auth');

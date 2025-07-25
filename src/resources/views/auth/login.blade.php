@@ -5,23 +5,21 @@
 <div class="auth-form">
     <h2>ログイン</h2>
 
-    @if ($errors->any())
-    <div class="error-box">
-        @foreach ($errors->all() as $error)
-            <p class="error-text">{{ $error }}</p>
-        @endforeach
-    </div>
-    @endif
-
     <form method="POST" action="{{ route('login') }}">
         @csrf
          <label for="email">メールアドレス</label>
-         <input type="email" name="email" id="email" value="{{ old('email') }}" required autofocus>
+         <input type="email" name="email" id="email" value="{{ old('email') }}">
+         @error('email')
+             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+        @enderror
 
          <label for="password">パスワード</label>
-         <input type="password" name="password" id="password" required>
+         <input type="password" name="password" id="password">
+         @error('password')
+             <p  class="text-red-500 text-sm mt-1">{{ $message }}</p>
+        @enderror
          
-        <button type="submit">ログイン</button>
+        <button  class="submit">ログイン</button>
     </form>
     <a href="{{ route('register') }}" >会員登録はこちら</a>
 </div>

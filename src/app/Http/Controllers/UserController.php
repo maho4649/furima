@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\AddressRequest;
+use App\Http\Requests\ProfileRequest;
 
 class UserController extends Controller
 {
@@ -12,30 +14,26 @@ class UserController extends Controller
     return view('users.edit-profile', compact('user'));
    }
 
-    public function updateProfile(Request $request)
+    public function updateProfile(AddressRequest $request)
     {
-      $request->validate([
-        'name' => 'required|string|max:255',
-        'zipcode' => 'required|string|max:8',
-        'address' => 'required|string|max:255',
-        'building' => 'required|string|max:255',
-        'left_icon' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-       ]);
 
-    $user = auth()->user();
-    $user->name = $request->name;
-    $user->zipcode = $request->zipcode;
-    $user->address = $request->address;
-    $user->building = $request->building;
+      $user = auth()->user();
+
+     $user->fill($request->only(['name','zipcode', 'address', 'building']));
 
     if ($request->hasFile('left_icon')) {
         $user->left_icon = $request->file('left_icon')->store('icons', 'public');
-
     }
 
-    $user->save();
 
-    return redirect()->route('mypage')->with('success', 'プロフィールを更新しました。');
+     try {
+    $user->save();
+    return redirect('/')->with('success', 'プロフィールを更新しました');
+} catch (\Exception $e) {
+    dd($e->getMessage());
+}
+
+
 
 
     }
@@ -43,27 +41,42 @@ class UserController extends Controller
     public function mypage()
     {
     $user = auth()->user();
-
-    if (!$user->zipcode || !$user->address || !$user->building) {
-        return redirect()->route('profile.edit')->with('warning', 'プロフィールを入力してください');
+    
+    if (!$user->zipcode || !$user->address) {
+    return redirect()->route('profile.edit')->with('warning', 'プロフィールを入力してください');
     }
+
     $items = $user->items()->latest()->get();
 
-    return view('users.mypage', compact('user','items'));
+    return view('users.mypage', [
+        'user' => $user,
+        'items' => $items,
+        'listType' => 'sell', // 例えば「出品商品」表示のときは 'sell'
+    ]);
     }
 
     public function sellList()
     {
     $user = auth()->user();
     $items = $user->items()->latest()->get(); // 出品商品取得
-    return view('users.mypage', compact('user', 'items'));
+    return view('users.mypage', [
+        'user' => $user,
+        'items' => $items,
+        'listType' => 'sell', 
+    ]);
     }
 
     public function buyList()
     {
     $user = auth()->user();
-    $items = $user->purchasedItems()->latest()->get(); // 購入商品取得（リレーションが必要）
-    return view('users.mypage', compact('user', 'items'));
+    $purchases = $user->purchases()->with('item')->orderBy('created_at', 'desc')->get();
+    $items = $purchases->pluck('item')->filter();  // null除外
+
+    return view('users.mypage', [
+        'user' => $user,
+        'items' => $items,
+        'listType' => 'buy', 
+    ]);
     }
 
 

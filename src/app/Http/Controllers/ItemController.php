@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ExhibitionRequest;
+use App\Http\Requests\CommentRequest;
 use App\Models\Item;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Category; 
 use App\Models\Like;
+
 
 
 class ItemController extends Controller
@@ -27,6 +30,27 @@ class ItemController extends Controller
 
     $items = $query->get();
 
+    $tab = $request->input('tab');
+    $userId = auth()->id();
+
+    // マイリスト：いいねした商品だけ
+    if ($tab === 'mylist' && auth()->check()) {
+        $items = Item::whereHas('likes', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->latest()->get();
+    } 
+    // おすすめ：全商品から自分の出品とお気に入りを除外
+    else {
+        $items = Item::query()
+            ->when(auth()->check(), function ($query) use ($userId) {
+                $query->where('user_id', '!=', $userId)
+                      ->whereDoesntHave('likes', function ($q) use ($userId) {
+                          $q->where('user_id', $userId);
+                      });
+            })
+            ->latest()
+            ->get();
+    }
     return view('items.index', compact('items'));
 }
 
@@ -36,18 +60,8 @@ public function create()
     return view('items.create', compact('categories'));
 }
 
-public function store(Request $request)
+public function store(ExhibitionRequest $request)
 {
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'brand' => 'nullable|string|max:255',
-        'description' => 'nullable|string',
-        'price' => 'required|numeric|min:1',
-        'condition' => 'required|string',
-        'categories' => 'array',
-        'categories.*' => 'integer',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
 
     $path = $request->file('image')->store('items', 'public');
 
@@ -80,7 +94,7 @@ public function like($itemId)
     return back();
 }
 
-public function comment(Request $request, $itemId)
+public function comment(CommentRequest $request, $itemId)
 {
     $request->validate(['comment' => 'required|string|max:255']);
     $item = Item::findOrFail($itemId);
@@ -88,7 +102,7 @@ public function comment(Request $request, $itemId)
         'user_id' => auth()->id(),
         'content' => $request->comment
     ]);
-    return back();
+    return back()->with('success', 'コメントを投稿しました。');
 }
 
 public function toggle($itemId)
