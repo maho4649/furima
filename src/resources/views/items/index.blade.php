@@ -3,7 +3,7 @@
 @section('content')
 <div style="margin-top: 2rem; margin-bottom: 1.5rem;"></div>
 
-<div class="container">
+<div style="flex-wrap: wrap;gap: 40px;justify-content: center;margin-top: 2rem;width: 100%;margin-left: auto;margin-right: auto;">
     
     {{-- タブ切り替え --}}
     <div class="mb-4">
@@ -23,8 +23,9 @@
         $isMyList = request('tab') === 'mylist';
     @endphp
 
+    @if ($isMyList && !auth()->check())
 
-    @if ($items->isEmpty())
+    @elseif ($items->isEmpty())
         <p>現在、出品されている商品はありません。</p>
     @else
         <div class="row">
