@@ -16,43 +16,37 @@ class ItemController extends Controller
 {
     public function index(Request $request)
 {
-    $query = Item::query()->latest();
-
-    // 認証中なら自分の出品を除外
-    if (auth()->check()) {
-        $query->where('user_id', '!=', auth()->id());
-    }
-
-    // 商品名で部分一致検索
-    if ($request->filled('search')) {
-        $query->where('name', 'like', '%' . $request->search . '%');
-    }
-
-    $items = $query->get();
-
     $tab = $request->input('tab');
     $userId = auth()->id();
 
-    // マイリスト：いいねした商品だけ
+    // ▼ マイリスト：ログインしているユーザーが「いいね」した商品だけ表示
     if ($tab === 'mylist' && auth()->check()) {
         $items = Item::whereHas('likes', function ($query) use ($userId) {
             $query->where('user_id', $userId);
-        })->latest()->get();
-    } 
-    // おすすめ：全商品から自分の出品とお気に入りを除外
-    else {
-        $items = Item::query()
-            ->when(auth()->check(), function ($query) use ($userId) {
-                $query->where('user_id', '!=', $userId)
-                      ->whereDoesntHave('likes', function ($q) use ($userId) {
-                          $q->where('user_id', $userId);
-                      });
-            })
-            ->latest()
-            ->get();
+        });
+
+    // ▼ おすすめ：ログイン中は自分の商品と自分のいいねを除く、それ以外は全商品
+    } else {
+        $items = Item::query();
+
+        if (auth()->check()) {
+            $items->where('user_id', '!=', $userId)
+                  ->whereDoesntHave('likes', function ($q) use ($userId) {
+                      $q->where('user_id', $userId);
+                  });
+        }
     }
+
+    // ▼ 共通：検索があれば適用
+    if ($request->filled('search')) {
+        $items->where('name', 'like', '%' . $request->search . '%');
+    }
+
+    $items = $items->latest()->get();
+
     return view('items.index', compact('items'));
 }
+
 
 public function create()
 {
