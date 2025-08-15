@@ -15,14 +15,13 @@ class Comment extends Model
         'content', 
     ];
 
-    public function user()
-   {
-    return $this->belongsTo(User::class);
-   }
-
     public function item()
-    {
-    return $this->belongsTo(Item::class);
-    }
+{
+    return $this->belongsTo(\App\Models\Item::class);
+}
+public function user()
+{
+    return $this->belongsTo(\App\Models\User::class);
+}
 
 }

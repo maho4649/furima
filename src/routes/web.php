@@ -11,10 +11,6 @@ Route::get('/', [ItemController::class, 'index'])->name('home');
 // 商品一覧（おすすめ・マイリスト切り替え用）
 Route::get('/items', [ItemController::class, 'index'])->name('item.index');
 
-
-// 商品一覧（マイリスト表示）
-Route::get('/mylist', [ItemController::class, 'myList'])->name('home.mylist')->middleware('auth');
-
 // 商品詳細
 Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.show');
 
@@ -40,8 +36,11 @@ Route::get('/mypage/profile', [UserController::class, 'editProfile'])->name('pro
 Route::put('/mypage/profile', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 
 //お気に入り・コメント
-Route::post('/items/{item}/like', [ItemController::class, 'like'])->name('items.like')->middleware('auth');
-Route::post('/items/{item}/like', [ItemController::class, 'toggle'])->name('items.like')->middleware('auth');
+Route::post('/items/{item}/toggle', [ItemController::class, 'toggleLike'])
+    ->name('items.toggleLike')
+    ->middleware('auth');
+
+
 
 Route::post('/items/{item}/comment', [ItemController::class, 'comment'])->name('items.comment')->middleware('auth');
 

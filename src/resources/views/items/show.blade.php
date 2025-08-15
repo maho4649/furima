@@ -19,19 +19,22 @@
                    
         {{-- いいねボタン --}}
         <div class="likes-comments text-center">
-
-           <form action="{{ route('items.like', $item->id) }}" method="POST" class="action-group">
-            @csrf
-             <button type="submit" class="like-button">☆</button>
-               <span class="count">{{ $item->likes->count() }}</span>
-            </form>
+          <form action="{{ route('items.toggleLike', $item->id) }}" method="POST" class="action-group">
+          @csrf
+          @php
+           $liked = auth()->check() && auth()->user()->likes->contains('item_id', $item->id);
+          @endphp
+            <button type="submit" class="like-button {{ $liked ? 'liked' : '' }}">☆</button>
+            <span class="count">{{ $item->likes->count() }}</span>
+          </form>
+          
          {{-- コメントボタン --}}
             <div class="action-group">
               <button type="button" onclick="toggleComments()" class="comment-button">💬</button>
                 <span class="count">{{ $item->comments->count() }}</span>
             </div>
 
-          </div>
+        </div>
        
             {{-- 購入ボタン --}}
             <form action="{{ route('purchase.show', $item->id) }}" method="GET" >

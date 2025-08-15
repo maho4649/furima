@@ -769,3 +769,12 @@ button {
     font-size: 0.9rem;
     margin-top: 4px;
 }
+
+.like-button.liked {
+    color: red;
+}
+
+.like-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

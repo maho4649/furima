@@ -76,7 +76,9 @@ public function store(ExhibitionRequest $request)
 
 public function show($item_id)
 {
-    $item = Item::with(['categories', 'user','likes'])->findOrFail($item_id);
+   $item = \App\Models\Item::withoutGlobalScopes()  // ← 万一スコープがあっても無効化
+        ->with(['categories', 'user', 'likes', 'comments.user'])
+        ->findOrFail($item_id);
 
     return view('items.show', compact('item'));
 }
@@ -99,22 +101,21 @@ public function comment(CommentRequest $request, $itemId)
     return back()->with('success', 'コメントを投稿しました。');
 }
 
-public function toggle($itemId)
+public function toggleLike(Item $item)
 {
     $userId = auth()->id();
-    $like = Like::where('user_id', $userId)->where('item_id', $itemId)->first();
+    $like = $item->likes()->where('user_id', $userId)->first();
 
     if ($like) {
-        $like->delete(); // いいね解除
+        $like->delete();
     } else {
-        Like::create([
-            'user_id' => $userId,
-            'item_id' => $itemId,
-        ]);
+        $item->likes()->create(['user_id' => $userId]);
     }
 
     return back();
 }
+
+
 
 
 
