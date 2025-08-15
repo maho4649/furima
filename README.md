@@ -12,7 +12,7 @@
 5. php artisan migrate
 6. php artisan db:seed
 7. php artisan storage:link
-
+8. vendor/bin/phpunit
 
 
 ## 使用技術
